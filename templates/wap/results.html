@@ -1,0 +1,26 @@
+{% extends "wap/base.html" %}
+{% block url %}/wap/citat{% endblock %}
+{% block card_title %}CITAT ({{ citat_list|length }}){% endblock %}
+{% block content %}
+  <h1>Citat</h1>
+
+  {% if not citat_list %}
+    <p class="no-results">Inga citat hittades.</p>
+  {% else %}
+    {% for c in citat_list %}
+    <div class="citat-item">
+      <div class="citat-header">
+        {{ c.name }}
+        {% if c.institution %}<span class="citat-inst"> · {{ c.institution }}</span>{% endif %}
+        {% if c.time %}<span class="citat-date"> · {{ c.time }}</span>{% endif %}
+      </div>
+      <div class="citat-text">"{{ c.citat }}"</div>
+      {% if c.note %}
+      <div class="citat-note">{{ c.note }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% endif %}
+
+  <a class="back-link" href="{{ url_for('wap_search') }}">← Ny sökning</a>
+{% endblock %}

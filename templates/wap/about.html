@@ -1,0 +1,19 @@
+{% extends "wap/base.html" %}
+{% block url %}/wap/om{% endblock %}
+{% block card_title %}OM KTH-CITAT{% endblock %}
+{% block content %}
+  <h1>Om siten</h1>
+  <p>
+    KTH-Citat är resultatet av nära fyra års studier på KTH.
+  </p>
+  <p>
+    Under denna tid har jag skrivit ner citat och tänkvärda ord från olika föreläsare och lärare jag haft.
+  </p>
+  <p>
+    Syftet är att fungera som en källa till kontemplation och minnen för oss som vill tänka tillbaka på vår KTH-tid.
+  </p>
+  <p style="font-size:10px; color:#556655; margin-top:10px; text-align:right;">
+    — Håkan Normark, 2004
+  </p>
+  <a class="back-link" href="{{ url_for('wap_index') }}">← Tillbaka</a>
+{% endblock %}

@@ -439,6 +439,102 @@ def parse_date(d):
         return None
 
 
+def get_citat(search='form', typ='1', institution='-1', person='-1', inlagt='-1', query=''):
+    conn = get_db()
+    citat_list = []
+    if search == 'text':
+        rows = conn.execute("""
+            SELECT Citat.citat, Person.Namn, Institution.Namn, Citat.tid, Citat.notering
+            FROM Citat, Person, Institution
+            WHERE Citat.person = Person.ID AND Person.Institution = Institution.ID
+              AND Citat.citat LIKE ? ORDER BY Citat.tid DESC
+        """, (f'%{query}%',)).fetchall()
+        for row in rows:
+            citat_list.append({
+                'citat': row[0].replace('&app', "'") if row[0] else '',
+                'name': row[1], 'institution': row[2],
+                'time': format_date(row[3]),
+                'note': row[4].replace('&app', "'") if row[4] else '',
+            })
+    else:
+        sql = """SELECT Citat.citat, Person.Namn, Institution.Namn, Citat.tid, Citat.inlagt, Citat.notering
+                 FROM Citat, Person, Institution
+                 WHERE Citat.person = Person.ID AND Person.Institution = Institution.ID"""
+        params = []
+        if str(institution) != '-1':
+            sql += " AND Person.Institution = ?"; params.append(institution)
+        if str(person) != '-1':
+            sql += " AND Person.ID = ?"; params.append(person)
+        sql += " AND Person.Typ = ? ORDER BY Citat.tid DESC"; params.append(typ)
+        rows = conn.execute(sql, params).fetchall()
+        today = date.today()
+        for row in rows:
+            inlagt_date = parse_date(row[4])
+            include = inlagt == '-1' or inlagt_date is None or inlagt_date >= today - timedelta(days=int(inlagt))
+            if include:
+                citat_list.append({
+                    'citat': row[0].replace('&app', "'") if row[0] else '',
+                    'name': row[1],
+                    'institution': row[2] if typ == '1' else '',
+                    'time': format_date(row[3]),
+                    'note': row[5].replace('&app', "'") if row[5] else '',
+                })
+    conn.close()
+    return citat_list
+
+
+# --- WAP routes ---
+
+@app.route('/wap')
+def wap_index():
+    return render_template('wap/index.html')
+
+
+@app.route('/wap/sok')
+def wap_search():
+    conn = get_db()
+    institutions = conn.execute("SELECT ID, Namn FROM Institution ORDER BY Namn").fetchall()
+    persons = conn.execute("SELECT ID, Namn FROM Person WHERE Typ=1 ORDER BY Namn").fetchall()
+    conn.close()
+    return render_template('wap/search.html', institutions=institutions, persons=persons)
+
+
+@app.route('/wap/citat')
+def wap_results():
+    search = request.args.get('search', 'form')
+    typ = request.args.get('typ', '1')
+    institution = request.args.get('institution', '-1')
+    person = request.args.get('person', '-1')
+    inlagt = request.args.get('inlagt', '-1')
+    query = request.args.get('query', '')
+    citat_list = get_citat(search=search, typ=typ, institution=institution,
+                           person=person, inlagt=inlagt, query=query)
+    return render_template('wap/results.html', citat_list=citat_list)
+
+
+@app.route('/wap/bladdra')
+def wap_browse():
+    conn = get_db()
+    persons = conn.execute("SELECT ID, Namn FROM Person ORDER BY Namn").fetchall()
+    conn.close()
+    return render_template('wap/browse.html', persons=persons)
+
+
+@app.route('/wap/slump')
+def wap_random():
+    import random
+    citat_list = get_citat(inlagt='-1', typ='1')
+    if citat_list:
+        c = random.choice(citat_list)
+        return render_template('wap/results.html', citat_list=[c])
+    return render_template('wap/results.html', citat_list=[])
+
+
+@app.route('/wap/om')
+def wap_about():
+    return render_template('wap/about.html')
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=True, port=port)

@@ -1,0 +1,15 @@
+{% extends "wap/base.html" %}
+{% block url %}/wap/bläddra{% endblock %}
+{% block card_title %}BLÄDDRA{% endblock %}
+{% block content %}
+  <h1>Bläddra</h1>
+  <p style="font-size:11px; color:#445544;">Välj en person:</p>
+
+  {% for p in persons %}
+  <a href="{{ url_for('wap_results', search='form', typ='1', institution='-1', person=p['ID']) }}">
+    {{ p['Namn'] }}
+  </a>
+  {% endfor %}
+
+  <a class="back-link" href="{{ url_for('wap_index') }}">← Tillbaka</a>
+{% endblock %}

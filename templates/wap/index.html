@@ -1,0 +1,15 @@
+{% extends "wap/base.html" %}
+{% block url %}/wap{% endblock %}
+{% block card_title %}KTH-CITAT{% endblock %}
+{% block content %}
+  <h1>KTH-Citat</h1>
+  <p style="text-align:center; font-size:11px; color:#445544; margin-bottom:8px;">
+    Välkommen till KTH-Citat!<br>
+    <span style="font-size:10px;">Citat från KTH:s korridorer</span>
+  </p>
+  <hr>
+  <a href="{{ url_for('wap_search') }}">Sök citat</a>
+  <a href="{{ url_for('wap_browse') }}">Bläddra citat</a>
+  <a href="{{ url_for('wap_random') }}">Slumpa ett citat</a>
+  <a href="{{ url_for('wap_about') }}">Om KTH-Citat</a>
+{% endblock %}

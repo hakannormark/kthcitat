@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>KTH-Citat WAP</title>
+  <style>
+    /* --- WAP 2004 aesthetic --- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #c8d0c8;
+      font-family: "Nokia Sans", "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      color: #000;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 0;
+    }
+
+    /* Phone frame */
+    .phone {
+      width: 100%;
+      max-width: 360px;
+      min-height: 100vh;
+      background: #d4dcd4;
+      display: flex;
+      flex-direction: column;
+      border-left: 2px solid #889088;
+      border-right: 2px solid #889088;
+    }
+
+    /* Status bar */
+    .statusbar {
+      background: #3a5a3a;
+      color: #a0d0a0;
+      font-size: 10px;
+      padding: 2px 6px;
+      display: flex;
+      justify-content: space-between;
+      letter-spacing: 0.5px;
+    }
+
+    /* Browser chrome */
+    .browser-bar {
+      background: #4a7a4a;
+      color: #c8e8c8;
+      font-size: 10px;
+      padding: 3px 6px 3px 6px;
+      border-bottom: 1px solid #2a4a2a;
+    }
+    .browser-bar .url {
+      background: #2a4a2a;
+      color: #90c890;
+      padding: 1px 4px;
+      font-size: 9px;
+      border-radius: 1px;
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    /* Screen area */
+    .screen {
+      background: #e8f0e0;
+      flex: 1;
+      border: 2px inset #a0b0a0;
+      margin: 4px;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Card = WML card */
+    .card {
+      flex: 1;
+      padding: 6px 8px;
+      overflow-y: auto;
+    }
+
+    .card-title {
+      background: #2a4a8a;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 3px 6px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 14px;
+      font-weight: bold;
+      color: #2a4a8a;
+      text-align: center;
+      padding: 6px 0 2px 0;
+      border-bottom: 1px solid #8a9a8a;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    p { margin: 4px 0; font-size: 13px; line-height: 1.4; }
+
+    hr {
+      border: none;
+      border-top: 1px solid #8a9a8a;
+      margin: 6px 0;
+    }
+
+    /* WAP links = large tap targets */
+    a {
+      display: block;
+      color: #0000cc;
+      text-decoration: none;
+      font-size: 13px;
+      padding: 7px 4px;
+      border-bottom: 1px solid #b0c0b0;
+    }
+    a:active { background: #2a4a8a; color: #fff; }
+    a::before { content: "▶ "; font-size: 9px; color: #4a7a4a; }
+
+    /* Form elements */
+    label {
+      display: block;
+      font-size: 11px;
+      color: #334433;
+      margin-top: 8px;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 5px 4px;
+      font-size: 13px;
+      border: 1px solid #6a8a6a;
+      background: #f0f8e8;
+      color: #000;
+      border-radius: 0;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    button, input[type="submit"] {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 8px;
+      background: #2a4a8a;
+      color: #fff;
+      font-size: 13px;
+      font-weight: bold;
+      border: 2px outset #4a6aaa;
+      border-radius: 0;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    button:active { border-style: inset; }
+
+    /* Softkey bar at bottom */
+    .softkeys {
+      background: #3a5a3a;
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 8px;
+      border-top: 1px solid #2a4a2a;
+    }
+    .softkey {
+      color: #c8e8c8;
+      font-size: 10px;
+      text-decoration: none;
+      padding: 2px 4px;
+      letter-spacing: 0.5px;
+    }
+    .softkey::before { content: none; }
+    .softkey:active { background: #2a4a2a; }
+
+    /* Citat card */
+    .citat-item {
+      border: 1px solid #8a9a8a;
+      margin-bottom: 8px;
+      background: #f4f8f0;
+    }
+    .citat-header {
+      background: #2a4a8a;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 3px 5px;
+    }
+    .citat-inst {
+      font-size: 10px;
+      color: #c8d8f8;
+      font-weight: normal;
+    }
+    .citat-text {
+      font-style: italic;
+      font-size: 13px;
+      padding: 5px;
+      color: #112211;
+      line-height: 1.4;
+    }
+    .citat-note {
+      font-size: 10px;
+      color: #445544;
+      padding: 2px 5px 4px 5px;
+      text-align: right;
+      border-top: 1px dotted #aaa;
+    }
+    .citat-date {
+      font-size: 10px;
+      color: #c8d8f8;
+    }
+
+    .no-results {
+      text-align: center;
+      color: #556655;
+      padding: 20px 8px;
+      font-size: 12px;
+    }
+
+    .back-link {
+      margin-top: 8px;
+      border-top: 1px solid #8a9a8a;
+    }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="statusbar">
+    <span>KTH ■■■■○</span>
+    <span>WAP 2.0</span>
+    <span id="clock">12:00</span>
+  </div>
+  <div class="browser-bar">
+    <span class="url">wap.kthcitat.se{% block url %}/{% endblock %}</span>
+  </div>
+  <div class="screen">
+    <div class="card-title">{% block card_title %}KTH-CITAT{% endblock %}</div>
+    <div class="card">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+  <div class="softkeys">
+    <a class="softkey" href="{{ url_for('wap_index') }}">Hem</a>
+    <span class="softkey" style="color:#90a890;">KTH-Citat</span>
+    <a class="softkey" href="{{ url_for('wap_search') }}">Sök</a>
+  </div>
+</div>
+<script>
+  // Show live clock
+  function tick() {
+    var d = new Date();
+    var h = d.getHours().toString().padStart(2,'0');
+    var m = d.getMinutes().toString().padStart(2,'0');
+    document.getElementById('clock').textContent = h+':'+m;
+  }
+  tick(); setInterval(tick, 10000);
+</script>
+</body>
+</html>
