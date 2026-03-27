@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+  <title>KTH-citat</title>
+  <meta content="Microsoft Visual Studio 7.0" name="GENERATOR">
+  <meta content="C#" name="CODE_LANGUAGE">
+  <meta charset="utf-8">
+</HEAD>
+<body bgColor="#fffff1" MS_POSITIONING="GridLayout" style="min-height:700px; position:relative;">
+  <img src="{{ url_for('static', filename='kth.gif') }}"
+       style="Z-INDEX:107; LEFT:16px; POSITION:absolute; TOP:16px; height:126px; width:252px;">
+
+  <span style="Z-INDEX:110; LEFT:297px; POSITION:absolute; TOP:50px; font-size:xx-large; font-family:Verdana; height:29px; width:355px;">KTH-Citat</span>
+
+  <a href="{{ url_for('about') }}"
+     style="Z-INDEX:118; LEFT:61px; POSITION:absolute; TOP:155px; width:196px; height:22px; font-family:Verdana; font-size:medium; color:black; text-decoration:none;">Vad är detta?</a>
+
+  <span style="Z-INDEX:105; LEFT:61px; POSITION:absolute; TOP:199px; font-size:medium; font-family:Verdana; height:29px; width:135px;">Sök citat</span>
+
+  <form method="post" id="mainform">
+    <!-- Persontyp -->
+    <span style="Z-INDEX:119; LEFT:112px; POSITION:absolute; TOP:236px; width:88px; height:29px; font-family:Verdana; font-size:medium;">Persontyp:</span>
+    <select name="typ" id="typSelect"
+            style="Z-INDEX:120; LEFT:223px; POSITION:absolute; TOP:236px; width:183px; height:29px; font-family:Verdana;"
+            onchange="this.form.action='{{ url_for('index') }}?typ='+this.value+'&institution='+document.getElementById('instSelect').value; this.form.submit();">
+      <option value="1" {% if selected_typ == '1' %}selected{% endif %}>Lärare/Personal</option>
+      <option value="2" {% if selected_typ == '2' %}selected{% endif %}>Teknolog</option>
+    </select>
+
+    <!-- Institution -->
+    <span id="instLabel" style="Z-INDEX:112; LEFT:112px; POSITION:absolute; TOP:277px; width:88px; height:29px; font-family:Verdana; font-size:medium; color:{% if selected_typ == '2' %}darkgray{% else %}black{% endif %};">Institution:</span>
+    <select name="institution" id="instSelect"
+            style="Z-INDEX:113; LEFT:223px; POSITION:absolute; TOP:277px; width:183px; height:29px; font-family:Verdana;"
+            {% if selected_typ == '2' %}disabled{% endif %}
+            onchange="this.form.action='{{ url_for('index') }}?typ='+document.getElementById('typSelect').value+'&institution='+this.value; this.form.submit();">
+      <option value="-1" {% if selected_institution == '-1' %}selected{% endif %}>Alla</option>
+      {% for inst in institutions %}
+      <option value="{{ inst['ID'] }}" {% if selected_institution == inst['ID']|string %}selected{% endif %}>{{ inst['Namn'] }}</option>
+      {% endfor %}
+    </select>
+
+    <!-- Person -->
+    <span style="Z-INDEX:106; LEFT:112px; POSITION:absolute; TOP:321px; font-size:medium; font-family:Verdana; height:29px; width:88px;">Person:</span>
+    <select name="person"
+            style="Z-INDEX:102; LEFT:223px; POSITION:absolute; TOP:321px; font-family:Verdana; height:31px; width:183px;">
+      <option value="-1">Alla</option>
+      {% for p in persons %}
+      <option value="{{ p['ID'] }}">{{ p['Namn'] }}</option>
+      {% endfor %}
+    </select>
+
+    <!-- Inlagt -->
+    <span style="Z-INDEX:111; LEFT:112px; POSITION:absolute; TOP:363px; font-size:medium; font-family:Verdana; height:29px; width:88px;">Inlagt:</span>
+    <select name="inlagt"
+            style="Z-INDEX:103; LEFT:223px; POSITION:absolute; TOP:363px; font-family:Verdana; height:31px; width:184px;">
+      <option value="-1">Alla</option>
+      <option value="0">Idag</option>
+      <option value="7">Senaste veckan</option>
+      <option value="30">Senaste månaden</option>
+      <option value="90">Senaste tre månaderna</option>
+    </select>
+
+    <!-- Visa citat button -->
+    <button type="submit" name="action" value="visa"
+            style="Z-INDEX:100; LEFT:223px; POSITION:absolute; TOP:396px; font-size:medium; font-family:Verdana; height:33px; width:183px;">Visa citat</button>
+
+    <!-- Fritext -->
+    <span style="Z-INDEX:115; LEFT:112px; POSITION:absolute; TOP:467px; width:88px; height:29px; font-family:Verdana; font-size:medium;">Fritext:</span>
+    <input type="text" name="query"
+           style="Z-INDEX:116; LEFT:223px; POSITION:absolute; TOP:467px; width:184px; height:25px; font-family:Verdana; font-size:x-small;">
+
+    <!-- Sök button -->
+    <button type="submit" name="action" value="sok"
+            style="Z-INDEX:117; LEFT:223px; POSITION:absolute; TOP:505px; width:183px; height:33px; font-family:Verdana; font-size:medium;">Sök</button>
+  </form>
+
+  <!-- Links at bottom -->
+  <a href="{{ url_for('add_citat') }}"
+     style="Z-INDEX:101; LEFT:62px; POSITION:absolute; TOP:583px; font-size:medium; font-family:Verdana; height:22px; width:196px; color:black; text-decoration:none;">Lägg till nytt citat</a>
+
+  <a href="{{ url_for('add_person') }}"
+     style="Z-INDEX:104; LEFT:62px; POSITION:absolute; TOP:631px; font-size:medium; font-family:Verdana; height:22px; width:196px; color:black; text-decoration:none;">Lägg till ny person</a>
+
+  {% if logged_in %}
+  <a href="{{ url_for('logout') }}"
+     style="LEFT:62px; POSITION:absolute; TOP:679px; font-size:x-small; font-family:Verdana; color:black; text-decoration:none;">Logga ut</a>
+  {% endif %}
+</body>
+</HTML>

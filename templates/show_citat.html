@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+  <title>KTH-citat</title>
+  <meta charset="utf-8">
+</HEAD>
+<body bgColor="#fffff1" MS_POSITIONING="GridLayout" style="min-height:300px; position:relative;">
+  <img src="{{ url_for('static', filename='kth.gif') }}"
+       style="Z-INDEX:102; LEFT:16px; POSITION:absolute; TOP:16px; height:126px; width:252px;">
+
+  <span style="Z-INDEX:103; LEFT:297px; POSITION:absolute; TOP:50px; height:29px; width:353px; font-size:xx-large; font-family:Verdana;">KTH-Citat</span>
+
+  <a href="{{ url_for('index') }}"
+     style="Z-INDEX:104; LEFT:613px; POSITION:absolute; TOP:31px; height:22px; width:65px; font-size:x-small; font-family:Verdana; color:black; text-decoration:none;">Startsida</a>
+
+  <TABLE id="Table1"
+         style="Z-INDEX:101; LEFT:61px; WIDTH:618px; FONT-FAMILY:Verdana; POSITION:absolute; TOP:173px; HEIGHT:79px"
+         cellSpacing="0" cellPadding="5" width="618" bgColor="#ffff99" border="0">
+    {% for c in citat_list %}
+    <TR>
+      <TD style="FONT-WEIGHT:bold; WIDTH:585px" bgColor="beige" colSpan="1" rowSpan="1">
+        {{ c.name }}
+      </TD>
+      <TD style="FONT-WEIGHT:bolder; FONT-SIZE:smaller; HEIGHT:27px" align="left" bgColor="beige" height="8">
+        {{ c.institution }}
+      </TD>
+      <TD style="FONT-WEIGHT:bolder; FONT-SIZE:smaller; HEIGHT:27px" align="right" width="160" bgColor="beige" height="8">
+        {{ c.time }}
+      </TD>
+    </TR>
+    <TR>
+      <TD style="WIDTH:618px; FONT-STYLE:italic; HEIGHT:37px" bgColor="#e3e3e1" colSpan="3">
+        &ldquo;{{ c.citat }}&rdquo;
+      </TD>
+    </TR>
+    {% if c.note %}
+    <TR>
+      <TD style="FONT-WEIGHT:lighter; FONT-SIZE:smaller; FONT-STYLE:italic; HEIGHT:27px"
+          bgColor="#e3e3e1" colSpan="3" align="right">
+        {{ c.note }}
+      </TD>
+    </TR>
+    {% endif %}
+    <TR>
+      <TD style="WIDTH:618px; HEIGHT:18px" colSpan="3" bgColor="#fffff1"></TD>
+    </TR>
+    {% endfor %}
+
+    {% if not citat_list %}
+    <TR>
+      <TD style="font-family:Verdana; font-size:small; padding:20px;" bgColor="beige">
+        Inga citat hittades.
+      </TD>
+    </TR>
+    {% endif %}
+  </TABLE>
+
+  <!-- spacer to push body height past the table -->
+  <div style="position:absolute; TOP:{% if citat_list %}{{ 173 + citat_list|length * 110 }}{% else %}300{% endif %}px; height:1px;"></div>
+</body>
+</HTML>

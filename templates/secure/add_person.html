@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+  <title>KTH-citat</title>
+  <meta charset="utf-8">
+</HEAD>
+<body bgColor="#fffff1" MS_POSITIONING="GridLayout" style="min-height:600px; position:relative;">
+  <img src="{{ url_for('static', filename='kth.gif') }}"
+       style="LEFT:16px; POSITION:absolute; TOP:16px; height:126px; width:252px;">
+
+  <span style="LEFT:297px; POSITION:absolute; TOP:50px; font-size:xx-large; font-family:Verdana; height:29px; width:353px;">KTH-Citat</span>
+
+  <a href="{{ url_for('index') }}"
+     style="LEFT:576px; POSITION:absolute; TOP:16px; font-size:x-small; font-family:Verdana; height:22px; width:70px; color:black; text-decoration:none;">Startsida</a>
+
+  <span style="LEFT:29px; POSITION:absolute; TOP:162px; font-size:large; font-family:Verdana;">Lägg till ny person</span>
+
+  <form method="post">
+    <!-- Persontyp -->
+    <span style="LEFT:53px; POSITION:absolute; TOP:228px; font-size:medium; font-family:Verdana;">Persontyp:</span>
+    <select name="typ" id="typSelect"
+            style="LEFT:200px; POSITION:absolute; TOP:228px; font-family:Verdana; height:31px; width:188px;"
+            onchange="toggleInstitution(this)">
+      {% for val, label in person_types %}
+      <option value="{{ val }}">{{ label }}</option>
+      {% endfor %}
+    </select>
+
+    <!-- Namn -->
+    <span style="LEFT:53px; POSITION:absolute; TOP:280px; font-size:medium; font-family:Verdana;">Namn:</span>
+    <input type="text" name="namn"
+           style="LEFT:200px; POSITION:absolute; TOP:280px; width:188px; height:25px; font-family:Verdana; font-size:x-small;">
+
+    <!-- Institution -->
+    <span id="instLabel" style="LEFT:53px; POSITION:absolute; TOP:328px; font-size:medium; font-family:Verdana;">Institution:</span>
+    <select name="institution" id="instSelect"
+            style="LEFT:200px; POSITION:absolute; TOP:328px; font-family:Verdana; height:31px; width:188px;">
+      {% for inst in institutions %}
+      <option value="{{ inst['ID'] }}">{{ inst['Namn'] }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit"
+            style="LEFT:200px; POSITION:absolute; TOP:390px; font-size:medium; font-family:Verdana; height:33px; width:188px;">Lägg till!</button>
+  </form>
+
+  <script>
+  function toggleInstitution(select) {
+    var isTeknolog = select.value !== '1';
+    document.getElementById('instSelect').disabled = isTeknolog;
+    document.getElementById('instLabel').style.color = isTeknolog ? 'darkgray' : 'black';
+  }
+  </script>
+</body>
+</HTML>

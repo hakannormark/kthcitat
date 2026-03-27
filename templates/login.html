@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+  <title>KTH-citat</title>
+  <meta charset="utf-8">
+</HEAD>
+<body bgColor="#fffff1" MS_POSITIONING="GridLayout" style="min-height:600px; position:relative;">
+  <img src="{{ url_for('static', filename='kth.gif') }}"
+       style="Z-INDEX:100; LEFT:16px; POSITION:absolute; TOP:16px; width:252px; height:126px;">
+
+  <span style="Z-INDEX:102; LEFT:297px; POSITION:absolute; TOP:50px; width:355px; height:29px; font-family:Verdana; font-size:xx-large;">KTH-Citat</span>
+
+  <a href="{{ url_for('index') }}"
+     style="Z-INDEX:110; LEFT:576px; POSITION:absolute; TOP:16px; color:black; width:70px; height:22px; font-family:Verdana; font-size:x-small; text-decoration:none;">Startsida</a>
+
+  <span style="Z-INDEX:101; LEFT:29px; POSITION:absolute; TOP:162px; width:129px; height:29px; font-family:Verdana; font-size:large;"> Logga in</span>
+
+  <span style="Z-INDEX:108; LEFT:93px; POSITION:absolute; TOP:211px; width:457px; height:128px; font-family:Verdana; font-size:small; display:block;">
+    För att kunna lägga till saker till KTH-Citat måste du vara inloggad. Detta är inget sätt för administratören att leka 1984 utan bara en försäkran om att inga otillbörliga inlägg görs på KTH-Citat. Om du inte har någon användare kan du skapa en genom att klicka på länken nedan.
+  </span>
+
+  <form method="post">
+    <input type="hidden" name="return_url" value="{{ return_url }}">
+
+    <span style="Z-INDEX:104; LEFT:207px; POSITION:absolute; TOP:375px; width:88px; height:29px; font-family:Verdana; font-size:medium;">Användarnamn:</span>
+    <input type="text" name="username" tabindex="3"
+           style="Z-INDEX:107; LEFT:366px; POSITION:absolute; TOP:375px; width:184px; height:25px; font-family:Verdana; font-size:x-small;">
+
+    {% if error_user %}
+    <span style="Z-INDEX:111; LEFT:560px; POSITION:absolute; TOP:375px; color:red; width:184px; height:29px; font-family:Verdana; font-size:x-small; font-style:italic;">Felaktigt användarnamn</span>
+    {% endif %}
+
+    <span style="Z-INDEX:103; LEFT:207px; POSITION:absolute; TOP:418px; width:88px; height:29px; font-family:Verdana; font-size:medium;">Lösenord:</span>
+    <input type="password" name="password" tabindex="4"
+           style="Z-INDEX:105; LEFT:366px; POSITION:absolute; TOP:418px; width:184px; height:25px; font-family:Verdana; font-size:x-small;">
+
+    {% if error_pass %}
+    <span style="Z-INDEX:112; LEFT:560px; POSITION:absolute; TOP:418px; color:red; width:160px; height:29px; font-family:Verdana; font-size:x-small; font-style:italic;">Felaktigt lösenord</span>
+    {% endif %}
+
+    <button type="submit"
+            style="Z-INDEX:106; LEFT:367px; POSITION:absolute; TOP:456px; width:183px; height:33px; font-family:Verdana; font-size:medium;">Logga in</button>
+  </form>
+
+  <a href="{{ url_for('add_user') }}{% if return_url %}?ReturnUrl={{ return_url }}{% endif %}"
+     style="Z-INDEX:109; LEFT:93px; POSITION:absolute; TOP:532px; color:black; width:196px; height:22px; font-family:Verdana; font-size:medium; text-decoration:none;">Skapa ny användare</a>
+</body>
+</HTML>
